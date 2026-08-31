@@ -13,6 +13,9 @@ sync: ## Sync dependencies
 .PHONY: install
 install: binary ## Build and install the binary to INSTALL_DIR (default ~/.local/bin)
 	@mkdir -p "$(INSTALL_DIR)"
+	@# rm first: overwriting a signed Mach-O in place invalidates the kernel's
+	@# cached code signature and every later exec dies with SIGKILL (taskgated)
+	@rm -f "$(INSTALL_DIR)/libre-mcp"
 	@cp dist/libre-mcp "$(INSTALL_DIR)/libre-mcp"
 	@chmod +x "$(INSTALL_DIR)/libre-mcp"
 	@echo "installed libre-mcp -> $(INSTALL_DIR)/libre-mcp"
